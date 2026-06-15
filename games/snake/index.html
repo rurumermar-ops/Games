@@ -1,33 +1,114 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
 <meta charset="UTF-8">
 <title>Snake</title>
 
 <style>
+
 body{
-    text-align:center;
+    margin:0;
     background:#111;
     color:white;
-    font-family:Arial;
+    font-family:Arial,sans-serif;
+    text-align:center;
+}
+
+h1,h2,p{
+    margin:10px;
+}
+
+button{
+    padding:12px 25px;
+    margin:10px;
+    font-size:18px;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
 }
 
 canvas{
-    background:black;
-    border:2px solid white;
+    background:#000;
+    border:3px solid white;
+    margin-top:20px;
 }
-</style>
 
+#menu,
+#settings,
+#gameover{
+    margin-top:50px;
+}
+
+label{
+    font-size:20px;
+}
+
+</style>
 </head>
 <body>
 
-<h1>🐍 Snake</h1>
+<div id="menu">
 
-<canvas id="game" width="400" height="400"></canvas>
+    <h1>🐍 Snake</h1>
 
-<p>Usa las flechas del teclado</p>
+    <button onclick="startGame()">
+        PLAY
+    </button>
 
-<a href="../../index.html">⬅ Volver</a>
+    <button onclick="openSettings()">
+        SETTINGS
+    </button>
+
+</div>
+
+<div id="settings" style="display:none;">
+
+    <h2>⚙ Settings</h2>
+
+    <label>
+        Retro Mode
+        <input
+            type="checkbox"
+            id="retroToggle"
+            checked>
+    </label>
+
+    <br><br>
+
+    <button onclick="backMenu()">
+        BACK
+    </button>
+
+</div>
+
+<div id="gameover" style="display:none;">
+
+    <h1>💀 GAME OVER</h1>
+
+    <p id="scoreText"></p>
+
+    <button onclick="startGame()">
+        PLAY AGAIN
+    </button>
+
+    <button onclick="backMenu()">
+        MENU
+    </button>
+
+</div>
+
+<canvas
+id="game"
+width="400"
+height="400"
+style="display:none;">
+</canvas>
+
+<br><br>
+
+<a href="../../index.html" style="color:white;">
+⬅ Volver al portal
+</a>
 
 <script>
 
@@ -36,70 +117,201 @@ const ctx = canvas.getContext("2d");
 
 const box = 20;
 
-let snake = [
-    {x: 200, y: 200}
-];
+let snake;
+let food;
 
-let food = {
-    x: Math.floor(Math.random()*20)*box,
-    y: Math.floor(Math.random()*20)*box
-};
+let dx;
+let dy;
 
-let dx = box;
-let dy = 0;
+let score = 0;
+
+let retroMode = true;
+
+let gameLoop;
+
+function startGame(){
+
+    clearInterval(gameLoop);
+
+    retroMode =
+    document.getElementById("retroToggle").checked;
+
+    snake = [
+        {x:200,y:200}
+    ];
+
+    food = {
+        x:Math.floor(Math.random()*20)*box,
+        y:Math.floor(Math.random()*20)*box
+    };
+
+    dx = box;
+    dy = 0;
+
+    score = 0;
+
+    document.getElementById("menu").style.display="none";
+    document.getElementById("settings").style.display="none";
+    document.getElementById("gameover").style.display="none";
+
+    document.getElementById("game").style.display="block";
+
+    gameLoop = setInterval(draw,100);
+
+}
+
+function openSettings(){
+
+    document.getElementById("menu").style.display="none";
+    document.getElementById("settings").style.display="block";
+
+}
+
+function backMenu(){
+
+    clearInterval(gameLoop);
+
+    document.getElementById("game").style.display="none";
+    document.getElementById("settings").style.display="none";
+    document.getElementById("gameover").style.display="none";
+
+    document.getElementById("menu").style.display="block";
+
+}
 
 document.addEventListener("keydown", e => {
 
-    if(e.key === "ArrowUp" && dy === 0){
-        dx = 0;
-        dy = -box;
+    if(e.key==="ArrowUp" && dy===0){
+        dx=0;
+        dy=-box;
     }
 
-    if(e.key === "ArrowDown" && dy === 0){
-        dx = 0;
-        dy = box;
+    if(e.key==="ArrowDown" && dy===0){
+        dx=0;
+        dy=box;
     }
 
-    if(e.key === "ArrowLeft" && dx === 0){
-        dx = -box;
-        dy = 0;
+    if(e.key==="ArrowLeft" && dx===0){
+        dx=-box;
+        dy=0;
     }
 
-    if(e.key === "ArrowRight" && dx === 0){
-        dx = box;
-        dy = 0;
+    if(e.key==="ArrowRight" && dx===0){
+        dx=box;
+        dy=0;
     }
 
 });
+
+function gameOver(){
+
+    clearInterval(gameLoop);
+
+    document.getElementById("scoreText").innerText =
+    "Puntuación: " + score;
+
+    document.getElementById("game").style.display="none";
+
+    document.getElementById("gameover").style.display="block";
+
+}
 
 function draw(){
 
     ctx.clearRect(0,0,400,400);
 
-    ctx.fillStyle = "red";
-    ctx.fillRect(food.x,food.y,box,box);
+    if(retroMode){
 
-    ctx.fillStyle = "lime";
+        ctx.fillStyle="red";
 
-    snake.forEach(part=>{
-        ctx.fillRect(part.x,part.y,box,box);
-    });
-
-    let head = {
-        x: snake[0].x + dx,
-        y: snake[0].y + dy
-    };
-
-    if(head.x === food.x && head.y === food.y){
-
-        food = {
-            x: Math.floor(Math.random()*20)*box,
-            y: Math.floor(Math.random()*20)*box
-        };
+        ctx.fillRect(
+            food.x,
+            food.y,
+            box,
+            box
+        );
 
     }else{
-        snake.pop();
+
+        ctx.beginPath();
+
+        ctx.fillStyle="#ff3030";
+
+        ctx.arc(
+            food.x+10,
+            food.y+10,
+            9,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fill();
+
     }
+
+    if(retroMode){
+
+        ctx.fillStyle="lime";
+
+        snake.forEach(part=>{
+
+            ctx.fillRect(
+                part.x,
+                part.y,
+                box,
+                box
+            );
+
+        });
+
+    }else{
+
+        snake.forEach(part=>{
+
+            let gradient =
+            ctx.createRadialGradient(
+                part.x+10,
+                part.y+10,
+                2,
+                part.x+10,
+                part.y+10,
+                12
+            );
+
+            gradient.addColorStop(
+                0,
+                "#7CFC00"
+            );
+
+            gradient.addColorStop(
+                1,
+                "#145214"
+            );
+
+            ctx.fillStyle = gradient;
+
+            ctx.beginPath();
+
+            ctx.arc(
+                part.x+10,
+                part.y+10,
+                10,
+                0,
+                Math.PI*2
+            );
+
+            ctx.fill();
+
+        });
+
+    }
+
+    let head = {
+
+        x:snake[0].x + dx,
+        y:snake[0].y + dy
+
+    };
 
     if(
         head.x < 0 ||
@@ -107,15 +319,58 @@ function draw(){
         head.x >= 400 ||
         head.y >= 400
     ){
-        alert("Game Over");
-        location.reload();
+        gameOver();
+        return;
+    }
+
+    for(let i=0;i<snake.length;i++){
+
+        if(
+            head.x===snake[i].x &&
+            head.y===snake[i].y
+        ){
+            gameOver();
+            return;
+        }
+
+    }
+
+    if(
+        head.x===food.x &&
+        head.y===food.y
+    ){
+
+        score++;
+
+        food = {
+
+            x:Math.floor(
+                Math.random()*20
+            )*box,
+
+            y:Math.floor(
+                Math.random()*20
+            )*box
+
+        };
+
+    }else{
+
+        snake.pop();
+
     }
 
     snake.unshift(head);
 
-}
+    ctx.fillStyle="white";
+    ctx.font="20px Arial";
+    ctx.fillText(
+        "Score: " + score,
+        10,
+        25
+    );
 
-setInterval(draw,100);
+}
 
 </script>
 
