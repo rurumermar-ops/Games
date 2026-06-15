@@ -281,7 +281,6 @@ const ctx =
 canvas.getContext("2d");
 
 const appleImage = new Image();
-
 appleImage.src = "apple.png";
 
 const box = 25;
@@ -428,31 +427,17 @@ ctx.clearRect(
 500,
 500);
 
+// --- DIBUJAR LA COMIDA (MANZANA) ---
 if(retroMode){
-
-ctx.fillStyle="red";
-
-ctx.fillRect(
-food.x,
-food.y,
-box,
-box);
-
+    ctx.fillStyle="red";
+    ctx.fillRect(
+    food.x,
+    food.y,
+    box,
+    box);
 }else{
-
-ctx.beginPath();
-
-ctx.fillStyle="#ff4444";
-
-ctx.arc(
-food.x+12,
-food.y+12,
-10,
-0,
-Math.PI*2);
-
-ctx.fill();
-
+    // Aquí se dibuja tu archivo apple.png cuando desactivas el modo retro
+    ctx.drawImage(appleImage, food.x, food.y, box, box);
 }
 
 snake.forEach(part=>{
