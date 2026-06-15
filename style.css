@@ -1,0 +1,41 @@
+body{
+  margin:0;
+  background:#111;
+  color:white;
+  font-family:Arial,sans-serif;
+}
+
+header{
+  padding:20px;
+  text-align:center;
+}
+
+#search{
+  width:300px;
+  max-width:90%;
+  padding:10px;
+  border:none;
+  border-radius:10px;
+}
+
+.games{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:20px;
+  padding:20px;
+}
+
+.card{
+  background:#222;
+  text-decoration:none;
+  color:white;
+  padding:40px;
+  border-radius:15px;
+  text-align:center;
+  transition:.2s;
+}
+
+.card:hover{
+  transform:scale(1.05);
+  background:#333;
+}
