@@ -1,9 +1,13 @@
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 
-// Creamos el objeto de la imagen
+// Creamos la imagen con la ruta directa ya que está en la misma carpeta
 const appleImage = new Image();
 appleImage.src = "apple.png";
+
+// Una manzana roja pixelada en Base64 por si el servidor de GitHub tarda en responder
+const fallbackApple = new Image();
+fallbackApple.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAZCAYAAADE6YVjAAAAAXNSR0IArs4c6QAAAD9JREFUSE1jZGBgUGBgYBBgGAVDCRgG4YgNOf7/b2CE0v//w9isg6mXpDgaDkdD0XAwHI6GouFwOBoOxuEwDAIApA0mEQC93vYAAAAASUVORK5CYII=";
 
 const box = 25;
 
@@ -95,13 +99,12 @@ function draw(){
     ctx.clearRect(0, 0, 500, 500);
 
     // --- DIBUJAR LA COMIDA (MANZANA) ---
-    // Verificamos si la imagen ya terminó de descargar en el navegador
     if (appleImage.complete && appleImage.naturalWidth !== 0) {
+        // Dibuja tu apple.png si ya cargó
         ctx.drawImage(appleImage, food.x, food.y, box, box);
     } else {
-        // Respaldo por si tarda milisegundos en conectar con GitHub
-        ctx.fillStyle = "red";
-        ctx.fillRect(food.x, food.y, box, box);
+        // Si no ha terminado de cargar, usa el respaldo para que el juego NO se congele
+        ctx.drawImage(fallbackApple, food.x, food.y, box, box);
     }
 
     // --- DIBUJAR LA SERPIENTE ---
