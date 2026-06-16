@@ -98,13 +98,12 @@ function gameOver(){
 function draw(){
     ctx.clearRect(0, 0, 500, 500);
 
-    // --- DIBUJAR LA COMIDA (MANZANA) ---
+    // --- DIBUJAR LA COMIDA (MANZANA MÁS GRANDE) ---
+    // box es 25, así que la dibujamos a tamaño 33 y la desplazamos -4px para centrarla
     if (appleImage.complete && appleImage.naturalWidth !== 0) {
-        // Dibuja tu apple.png si ya cargó
-        ctx.drawImage(appleImage, food.x, food.y, box, box);
+        ctx.drawImage(appleImage, food.x - 4, food.y - 4, 33, 33);
     } else {
-        // Si no ha terminado de cargar, usa el respaldo para que el juego NO se congele
-        ctx.drawImage(fallbackApple, food.x, food.y, box, box);
+        ctx.drawImage(fallbackApple, food.x - 4, food.y - 4, 33, 33);
     }
 
     // --- DIBUJAR LA SERPIENTE ---
