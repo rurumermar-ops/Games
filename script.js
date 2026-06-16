@@ -1,6 +1,7 @@
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 
+// Creamos el objeto de la imagen
 const appleImage = new Image();
 appleImage.src = "apple.png";
 
@@ -93,8 +94,15 @@ function gameOver(){
 function draw(){
     ctx.clearRect(0, 0, 500, 500);
 
-    // --- DIBUJAR LA COMIDA (SIEMPRE LA MANZANA IMAGEN) ---
-    ctx.drawImage(appleImage, food.x, food.y, box, box);
+    // --- DIBUJAR LA COMIDA (MANZANA) ---
+    // Verificamos si la imagen ya terminó de descargar en el navegador
+    if (appleImage.complete && appleImage.naturalWidth !== 0) {
+        ctx.drawImage(appleImage, food.x, food.y, box, box);
+    } else {
+        // Respaldo por si tarda milisegundos en conectar con GitHub
+        ctx.fillStyle = "red";
+        ctx.fillRect(food.x, food.y, box, box);
+    }
 
     // --- DIBUJAR LA SERPIENTE ---
     snake.forEach(part => {
