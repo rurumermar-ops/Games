@@ -280,7 +280,12 @@ document.getElementById("game");
 const ctx =
 canvas.getContext("2d");
 
+// Control de carga de la imagen para evitar que se rompa el bucle
+let appleLoaded = false;
 const appleImage = new Image();
+appleImage.onload = function() {
+    appleLoaded = true;
+};
 appleImage.src = "apple.png";
 
 const box = 25;
@@ -428,8 +433,14 @@ ctx.clearRect(
 500);
 
 // --- DIBUJAR LA COMIDA ---
-// Forzamos a que dibuje siempre la imagen apple.png
-ctx.drawImage(appleImage, food.x, food.y, box, box);
+if (appleLoaded) {
+    // Si la imagen ya cargó en el navegador, la dibuja
+    ctx.drawImage(appleImage, food.x, food.y, box, box);
+} else {
+    // Si aún no ha cargado (o hay un error de ruta), dibuja un cuadrado rojo de respaldo para que el juego siga funcionando
+    ctx.fillStyle = "red";
+    ctx.fillRect(food.x, food.y, box, box);
+}
 
 snake.forEach(part=>{
 
