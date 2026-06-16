@@ -93,14 +93,8 @@ function gameOver(){
 function draw(){
     ctx.clearRect(0, 0, 500, 500);
 
-    // --- DIBUJAR LA COMIDA ---
-    if(retroMode){
-        ctx.fillStyle = "red";
-        ctx.fillRect(food.x, food.y, box, box);
-    } else {
-        // Usa tu imagen apple.png cuando quitas el modo retro
-        ctx.drawImage(appleImage, food.x, food.y, box, box);
-    }
+    // --- DIBUJAR LA COMIDA (SIEMPRE LA MANZANA IMAGEN) ---
+    ctx.drawImage(appleImage, food.x, food.y, box, box);
 
     // --- DIBUJAR LA SERPIENTE ---
     snake.forEach(part => {
