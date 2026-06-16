@@ -427,18 +427,9 @@ ctx.clearRect(
 500,
 500);
 
-// --- DIBUJAR LA COMIDA (MANZANA) ---
-if(retroMode){
-    ctx.fillStyle="red";
-    ctx.fillRect(
-    food.x,
-    food.y,
-    box,
-    box);
-}else{
-    // Aquí se dibuja tu archivo apple.png cuando desactivas el modo retro
-    ctx.drawImage(appleImage, food.x, food.y, box, box);
-}
+// --- DIBUJAR LA COMIDA ---
+// Forzamos a que dibuje siempre la imagen apple.png
+ctx.drawImage(appleImage, food.x, food.y, box, box);
 
 snake.forEach(part=>{
 
