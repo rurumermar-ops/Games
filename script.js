@@ -1,13 +1,9 @@
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 
-// Creamos la imagen con la ruta directa ya que está en la misma carpeta
+// Cargamos tu manzana original
 const appleImage = new Image();
 appleImage.src = "apple.png";
-
-// Una manzana roja pixelada en Base64 por si el servidor de GitHub tarda en responder
-const fallbackApple = new Image();
-fallbackApple.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAZCAYAAADE6YVjAAAAAXNSR0IArs4c6QAAAD9JREFUSE1jZGBgUGBgYBBgGAVDCRgG4YgNOf7/b2CE0v//w9isg6mXpDgaDkdD0XAwHI6GouFwOBoOxuEwDAIApA0mEQC93vYAAAAASUVORK5CYII=";
 
 const box = 25;
 
@@ -98,13 +94,10 @@ function gameOver(){
 function draw(){
     ctx.clearRect(0, 0, 500, 500);
 
-    // --- DIBUJAR LA COMIDA (MANZANA MÁS GRANDE) ---
-    // box es 25, así que la dibujamos a tamaño 33 y la desplazamos -4px para centrarla
-    if (appleImage.complete && appleImage.naturalWidth !== 0) {
-        ctx.drawImage(appleImage, food.x - 4, food.y - 4, 33, 33);
-    } else {
-        ctx.drawImage(fallbackApple, food.x - 4, food.y - 4, 33, 33);
-    }
+    // --- DIBUJAR LA MANZANA MÁS GRANDE ---
+    // Forzamos el tamaño a 35x35 (la casilla normal mide 25) 
+    // y la movemos -5px a la izquierda y arriba para que quede perfectamente centrada.
+    ctx.drawImage(appleImage, food.x - 5, food.y - 5, 35, 35);
 
     // --- DIBUJAR LA SERPIENTE ---
     snake.forEach(part => {
